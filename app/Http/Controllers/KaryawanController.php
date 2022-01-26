@@ -28,9 +28,9 @@ class KaryawanController extends Controller
                     data-nomor_hp="' . $row->nomor_hp . '" 
                     data-salary="' . $row->salary . '" 
                     data-foto_profil="' . $row->foto_profil . '" 
-                    class="editData btn btn-primary btn-sm m-1">Edit</a>';
-                    $button = $button . ' <button data-karyawan_id="' . $row->karyawan_id . '" class="btn btn-danger btn-sm deleteButton mr-1">Delete</button>';
-                    $button = $button . ' <a href="generateWord/' . $row->karyawan_id . '" class="btn btn-primary btn-sm">Generate Word</a>';
+                    class="editData btn btn-primary btn-sm m-1"><i class="fa fa-edit"></i> Edit</a>';
+                    $button = $button . ' <button data-karyawan_id="' . $row->karyawan_id . '" class="btn btn-danger btn-sm deleteButton mr-1"><i class="fa fa-trash"></i> Delete</button>';
+                    $button = $button . ' <a href="generateWord/' . $row->karyawan_id . '" class="btn btn-primary btn-sm"><i class="fa fa-file"></i> Generate Word</a>';
 
                     return $button;
                 })
@@ -150,7 +150,7 @@ class KaryawanController extends Controller
     {
 
         DB::beginTransaction();
-        $update = Karyawan::where('karyawan_id', $request->karyawan_id)->update(array('status' => 0));
+        $update = Karyawan::where('karyawan_id', $request->karyawan_id)->delete();
 
         if ($update) {
             DB::commit();
@@ -197,10 +197,10 @@ class KaryawanController extends Controller
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         try {
-            $objWriter->save(storage_path('helloWorld.docx'));
+            $objWriter->save(storage_path('dataKaryawan.docx'));
+            return response()->download(storage_path('dataKaryawan.docx'));
         } catch (Exception $e) {
+            dd($e);
         }
-
-        return response()->download(storage_path('karyawan.docx'));
     }
 }

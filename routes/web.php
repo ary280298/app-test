@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [KaryawanController::class, 'index']);
 Route::get('karyawan', [KaryawanController::class, 'index']);
 Route::get('generateWord/{id}', [KaryawanController::class, 'generateDocx']);

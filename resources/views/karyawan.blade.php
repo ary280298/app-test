@@ -13,16 +13,19 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-12  mb-2 mt-2">
-                <h3>Data Karyawan</h3>
+            <div class="col-md-12  mb-2 mt-5">
+                <h3 style="text-align:center">Data Karyawan</h3>
             </div>
             <div class="col-md-12  mb-2 mt-2">
-                <button class="btn btn-primary col-md-1" id="add_data">Add Data</button>
+                <button class="btn btn-primary col-md-2 p-2" id="add_data"><i class="fa fa-plus"></i> Add Data</button>
             </div>
         </div>
         <div class="row">
@@ -48,7 +51,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah data karyawan</h5>
+                    <h5 class="modal-title" id="modalTitle"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -103,6 +106,7 @@
     $("#add_data").click(function (e) {
         $("#fotoWrapper").css('display', 'none');
         $("#updateData").css('display', 'none');
+        $("#modalTitle").text("Tambah Data Karyawan");
         $("#saveData").css('display', 'block');
         $("#modal_add").modal('show');
         $("#email_aktif").prop('disabled', false);
@@ -113,6 +117,7 @@
     })
     $('body').on('click', '.editData', function () {
         $("#saveData").css('display', 'none');
+        $("#modalTitle").text("Edit Data Karyawan");
         $("#updateData").css('display', 'block');
         $("#nama_karyawan").val($(this).data('nama_karyawan'));
         $("#email_aktif").val($(this).data('email_aktif')).prop('disabled', true);
@@ -129,12 +134,12 @@
             $(".jenis_kelamin2").prop('checked', true);
         }
     });
-    
+
 
     $("#updateData").click(function (e) {
         updateDataKaryawan();
     })
-   
+
 
     function getData() {
         var table = $('.dataKaryawan').DataTable({
@@ -292,11 +297,13 @@
         });
     }
     $('body').on('click', '.deleteButton', function () {
-        var karyawan_id = $(this).data('karyawan_id');          
+        var karyawan_id = $(this).data('karyawan_id');
         $.ajax({
             url: 'api/karyawan/delete',
             type: "POST",
-            data: {"karyawan_id" : karyawan_id},
+            data: {
+                "karyawan_id": karyawan_id
+            },
             dataType: "json",
             success: function (response, xhr) {
                 // console.log(xhr.status)
@@ -304,7 +311,7 @@
                     position: 'center',
                     icon: 'success',
                     title: 'Berhasil',
-                    text: 'Data berhasil disimpan',
+                    text: 'Data berhasil dihapus',
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -326,21 +333,21 @@
             }
         });
     });
-    
-    $('body').on('click', '.generateWord', function () {      
+
+    $('body').on('click', '.generateWord', function () {
         var id = $(this).data('karyawan_id');
         $.ajax({
             url: 'api/karyawan/generate/' + id,
-            type: "GET",            
+            type: "GET",
             dataType: "json",
             success: function (response, xhr) {
-               return response;
+                return response;
 
             }
         });
     });
 
-    function reset(){
+    function reset() {
         $("#nama_karyawan").val('');
         $("#email_aktif").val('');
         $("#no_hp").val('');
